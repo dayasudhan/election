@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <!--<item android:id="@+id/location"-->
+              <!--android:title="Location"-->
+              <!--android:icon="@drawable/ic_action_fab" />-->
+
+        <item android:id="@+id/main"
+            android:title="Invite"
+            android:icon="@drawable/pinvitation" />
+        <item android:id="@+id/notification"
+            android:title="Notifications"
+            android:icon="@drawable/pnotifications" />
+
+        <item android:id="@+id/invite"
+            android:title="Invite"
+            android:icon="@drawable/pinvitation" />
+
+        <item android:id="@+id/about_Candidate"
+            android:title="Help"
+            android:icon="@drawable/phelp" />
+
+    </group>
+</menu>
