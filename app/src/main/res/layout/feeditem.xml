@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingLeft="10dp"
+
+    android:paddingBottom="10dp"
+    android:background="@drawable/list_background" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vendor_image_view"
+        android:layout_marginTop="10dp"
+        android:background="@color/img_background"
+        android:layout_alignParentTop="true"
+
+        android:layout_alignParentLeft="true" />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Headlines"
+        android:textColor="@color/title_text_color"
+        android:id="@+id/feed_name"
+        android:layout_below="@+id/vendor_image_view"
+        android:layout_alignLeft="@+id/vendor_image_view"
+        android:layout_alignStart="@+id/vendor_image_view"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Description comes here"
+        android:id="@+id/feed_description"
+        android:textColor="@color/secondary_text_color"
+        android:textSize="15sp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/feed_name"
+        android:layout_alignLeft="@+id/feed_name"
+        android:layout_alignStart="@+id/feed_name" />
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>
