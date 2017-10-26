@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -47,6 +48,7 @@ public class ImageLoader {
 
     public ImageLoader(Context context,int x,int y){
 
+
         fileCache = new FileCache(context);
         x = width;
         y = height;
@@ -59,13 +61,13 @@ public class ImageLoader {
     // default image show in list (Before online image download)
     final int stub_id= R.drawable.logo;
 
-    public void DisplayImage(String url, ImageView imageView)
+    public void DisplayImage(ArrayList<String> url, ImageView imageView)
     {
         //Store image and url in Map
-        imageViews.put(imageView, url);
+        imageViews.put(imageView, url.get(0));
 
         //Check image is stored in MemoryCache Map or not (see MemoryCache.java)
-        Bitmap bitmap = memoryCache.get(url);
+        Bitmap bitmap = memoryCache.get( url.get(0));
 
         if(bitmap!=null){
             // if image is stored in MemoryCache Map then
@@ -75,7 +77,7 @@ public class ImageLoader {
         else
         {
             //queue Photo to download from url
-            queuePhoto(url, imageView);
+            queuePhoto( url.get(0), imageView);
 
             //Before downloading image show default image
             imageView.setImageResource(stub_id);
