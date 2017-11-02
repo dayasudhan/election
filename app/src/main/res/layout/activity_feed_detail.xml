@@ -29,15 +29,26 @@ tools:context="com.kuruvatech.election.FeedDetail">
         android:id="@+id/order_details_lay"
         >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_vendor_image_view"
-            android:layout_marginTop="10dp"
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/detail_vendor_image_view"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@color/img_background"-->
+            <!--android:layout_below="@+id/detail_feed_description"-->
+            <!--android:layout_alignLeft="@+id/detail_feed_description"-->
+            <!--android:layout_alignStart="@+id/detail_feed_description"  />-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/detail_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/img_background"
             android:layout_below="@+id/detail_feed_description"
             android:layout_alignLeft="@+id/detail_feed_description"
-            android:layout_alignStart="@+id/detail_feed_description"  />
+            android:layout_alignStart="@+id/detail_feed_description"
+            android:layout_alignParentRight="true"
+             />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,12 +80,13 @@ tools:context="com.kuruvatech.election.FeedDetail">
             android:id="@+id/linear"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/detail_vendor_image_view"
-            android:layout_toRightOf="@+id/detail_vendor_image_view"
+            android:layout_below="@+id/detail_recycler_view"
+
+            android:layout_toRightOf="@+id/detail_recycler_view"
             android:layout_alignParentRight="true"
             android:layout_alignLeft="@+id/detail_feed_name"
             android:layout_alignStart="@+id/detail_feed_name"
-            android:layout_marginTop="9dp"
+
             android:orientation="horizontal" >
 
 
@@ -108,17 +120,17 @@ tools:context="com.kuruvatech.election.FeedDetail">
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"
-            android:textColor="@color/titleTextColor"
-            android:id="@+id/back_button"
-            android:background="@drawable/buttonselector"
-            android:layout_marginTop="5dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true" />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="BACK"-->
+            <!--android:textColor="@color/titleTextColor"-->
+            <!--android:id="@+id/back_button"-->
+            <!--android:background="@drawable/buttonselector"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentRight="true" />-->
     </RelativeLayout>
 
 </LinearLayout>

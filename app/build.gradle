@@ -43,5 +43,7 @@ dependencies {
     compile 'com.splunk.mint:mint:5.0.0'
     compile 'com.google.android.gms:play-services-appindexing:9.2.1'
     compile 'com.android.support:support-v4:24.2.0'
-    compile 'com.firebase:firebase-client-android:2.5.1+'
+    compile 'com.android.support:recyclerview-v7:24.0.+'
+    compile 'com.google.firebase:firebase-database:9.2.1'
 }
+apply plugin: 'com.google.gms.google-services'

@@ -11,11 +11,20 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+//import com.firebase.client.DataSnapshot;
+//import com.firebase.client.Firebase;
+//import com.firebase.client.FirebaseError;
+//import com.firebase.client.ValueEventListener;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import com.kuruvatech.election.utils.Constants;
 import com.kuruvatech.election.utils.SessionManager;
 
@@ -39,41 +48,46 @@ public class NotificationListener extends Service {
     public int onStartCommand(Intent iintent, int flags, int startId) {
 
 
-        Firebase.setAndroidContext(getApplicationContext());
+      //  Firebase.setAndroidContext(getApplicationContext());
+        DatabaseReference mPostReference = FirebaseDatabase.getInstance().getReference();
+
         //Creating a firebase object
-        Firebase firebase = new Firebase(Constants.FIREBASE_APP + '/' + "customer");
+      //  Firebase firebase = new Firebase(Constants.FIREBASE_APP + '/' + "customer");
         session = new SessionManager(getApplicationContext());
         //Adding a valueevent listener to firebase
         //this will help us to  track the value changes on firebase
-        firebase.addValueEventListener(new ValueEventListener() {
+        mPostReference.addValueEventListener(new ValueEventListener() {
 
             //This method is called whenever we change the value in firebase
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
-                if (snapshot.child("update").exists()) {
-                    String msg = snapshot.child("update").getValue().toString();
-                    if(msg.compareTo(session.getlastpn()) != 0) {
+                //if (snapshot.child("update").exists()) {
+                    Toast.makeText(getApplicationContext(),"hi update",Toast.LENGTH_LONG).show();
+                    String msg = snapshot.getValue().toString();
+                 //   if(msg.compareTo(session.getlastpn()) != 0) {
                         session.setlastpn(msg);
                         showNotification(Calendar.getInstance().getTimeInMillis(), msg, 2);
-                    }
-                } else if (snapshot.child("info").exists()) {
-                    String msg = snapshot.child("info").getValue().toString();
-                    if(msg.compareTo(session.getlastpn()) != 0) {
-                        session.setlastpn(msg);
-                        showNotification(Calendar.getInstance().getTimeInMillis(), msg, 3);
-                    }
-                }
-                else if (session.getCurrentOrderId() != null && snapshot.child(session.getCurrentOrderId()).exists()) {
-                    String msg = snapshot.child(session.getCurrentOrderId()).getValue().toString();
-                    showNotification(Calendar.getInstance().getTimeInMillis(), msg, 1);
-                }
+                //    }
+//                } else if (snapshot.child("info").exists()) {
+//                    String msg = snapshot.child("info").getValue().toString();
+//                    if(msg.compareTo(session.getlastpn()) != 0) {
+//                        session.setlastpn(msg);
+//                        showNotification(Calendar.getInstance().getTimeInMillis(), msg, 3);
+//                    }
+//                }
+//                else if (session.getCurrentOrderId() != null && snapshot.child(session.getCurrentOrderId()).exists()) {
+//                    String msg = snapshot.child(session.getCurrentOrderId()).getValue().toString();
+//                    showNotification(Calendar.getInstance().getTimeInMillis(), msg, 1);
+//                }
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.e("The read failed: ", firebaseError.getMessage());
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("The read failed: ", databaseError.getMessage());
             }
+
+
         });
 
         return START_STICKY;
@@ -101,38 +115,38 @@ public class NotificationListener extends Service {
 //            intent = new Intent(getApplicationContext(
 // ), StatusTrackerFragment.class);
 //        }
-        if (intent_type == 1 )
-        {
-            String status = msg.substring(msg.indexOf(" - ") + 3);
-            if(status.equals("ACCEPTED"))
-            {
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("notificationFragment", "accepted");
-
-            }else
-            {
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("notificationFragment", "rejected");
-            }
-
-        }
-        else if(intent_type==3)
-        {
-            intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.putExtra("notificationFragment", "notify");
-        }
+//        if (intent_type == 1 )
+//        {
+//            String status = msg.substring(msg.indexOf(" - ") + 3);
+//            if(status.equals("ACCEPTED"))
+//            {
+//                intent = new Intent(getApplicationContext(), MainActivity.class);
+//                intent.putExtra("notificationFragment", "accepted");
+//
+//            }else
+//            {
+//                intent = new Intent(getApplicationContext(), MainActivity.class);
+//                intent.putExtra("notificationFragment", "rejected");
+//            }
+//
+//        }
+//        else if(intent_type==3)
+//        {
+//            intent = new Intent(getApplicationContext(), MainActivity.class);
+//            intent.putExtra("notificationFragment", "notify");
+//        }
 //        else if(intent_type == 3) {
 //            intent = new Intent(getApplicationContext(), MainActivity.class);
 //            intent.putExtra("notificationFragment", "favoritesMenuItem");
 //
 //        }
-        else
+
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=khaanavali.customer"));
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(pendingIntent);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-        builder.setContentTitle("Khaanavali");
+        builder.setContentTitle("Election");
         builder.setContentText(msg);
         builder.setAutoCancel(true);
         builder.setWhen(when);

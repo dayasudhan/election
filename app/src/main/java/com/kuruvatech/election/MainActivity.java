@@ -48,6 +48,18 @@ public class MainActivity extends AppCompatActivity {
     SessionManager session;
     RelativeLayout navHead;
     TextView name,email,phno;
+
+    public boolean isOnline(Context context) {
+        ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+            Toast.makeText(context, "No Internet connection!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +71,38 @@ public class MainActivity extends AppCompatActivity {
         setNavigationDrawer();
         setToolBar();
         if (!checkNotificationListenerServiceRunning()) {
+            Toast.makeText(getApplicationContext(),"hi update 1",Toast.LENGTH_LONG).show();
             startService(new Intent(this, NotificationListener.class));
         }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"hi update 2",Toast.LENGTH_LONG).show();
+        }
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        if (!isOnline(MainActivity.this))
+        {
+            try {
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+                alertDialog.setTitle("Info");
+                alertDialog.setMessage("Internet not available, Cross check your internet connectivity and try again");
+                alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+
+                    }
+                });
+
+                alertDialog.show();
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
+
 
     }
     private void setToolBar() {
@@ -138,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                     .equals(service.service.getClassName())) {
                 return true;
             }
+
         }
         return false;
     }

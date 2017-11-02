@@ -6,12 +6,19 @@
     android:paddingBottom="10dp"
     android:background="@drawable/list_background" android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/vendor_image_view"
-        android:layout_marginTop="10dp"
-        android:background="@color/img_background"
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/vendor_image_view"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@color/img_background"-->
+        <!--android:layout_below="@+id/btShowmore"-->
+        <!--android:layout_alignLeft="@+id/feed_description"-->
+        <!--android:layout_alignStart="@+id/feed_description"  />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/btShowmore"
         android:layout_alignLeft="@+id/feed_description"
         android:layout_alignStart="@+id/feed_description"  />
@@ -55,8 +62,8 @@
         android:id="@+id/linear"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/vendor_image_view"
-        android:layout_toRightOf="@+id/vendor_image_view"
+        android:layout_below="@+id/recycler_view"
+        android:layout_toRightOf="@+id/recycler_view"
         android:layout_alignParentRight="true"
         android:layout_alignLeft="@+id/feed_name"
         android:layout_alignStart="@+id/feed_name"
@@ -69,7 +76,7 @@
             android:layout_height="37dp"
             android:src="@drawable/ic_action_share"
             android:gravity="center_horizontal|center_vertical"
-            android:id="@+id/sub_btn"
+            android:id="@+id/shareit"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="20dp"

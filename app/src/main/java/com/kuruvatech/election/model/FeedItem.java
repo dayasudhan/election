@@ -9,7 +9,12 @@ public class FeedItem {
     String description;
     String heading;
     ArrayList<String> feedimages;
-
+    public FeedItem()
+    {
+        description = new String();
+        heading = new String();
+        feedimages = new ArrayList<String>();
+    }
     public String getDescription() {
         return description;
     }

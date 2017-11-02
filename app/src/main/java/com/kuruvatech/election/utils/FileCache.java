@@ -5,6 +5,7 @@ package com.kuruvatech.election.utils;
  */
 
 import android.content.Context;
+import android.os.Environment;
 
 import java.io.File;
 
@@ -20,7 +21,8 @@ public class FileCache {
         {
             //if SDCARD is mounted (SDCARD is present on device and mounted)
             cacheDir = new File(
-                    context.getFilesDir().getPath(),"LazyList");
+                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath(),"LazyList");
+
         }
 //        else
 //        {
@@ -36,7 +38,8 @@ public class FileCache {
 
     public File getFile(String url){
         //Identify images by hashcode or encode by URLEncoder.encode.
-        String filename= String.valueOf(url.hashCode());
+        String fileName2 = url.substring(url.lastIndexOf('/') + 1);
+        String filename= String.valueOf(fileName2);
 
         File f = new File(cacheDir, filename);
         return f;

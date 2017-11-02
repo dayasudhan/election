@@ -4,29 +4,33 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
+import android.net.Uri;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.gson.Gson;
 import com.kuruvatech.election.FeedDetail;
 import com.kuruvatech.election.R;
+import com.kuruvatech.election.RecyclerItemClickListener;
+import com.kuruvatech.election.SingleViewActivity;
 import com.kuruvatech.election.model.FeedItem;
 import com.kuruvatech.election.utils.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gagan on 10/23/2017.
@@ -37,8 +41,8 @@ public class FeedAdapter extends BaseAdapter {
     Typeface cr;
     int layoutResID;
     private ArrayList<FeedItem> mFeedList;
-
     public ImageLoader imageLoader;
+
     public FeedAdapter(Activity context, int layoutResourceID,
                        ArrayList<FeedItem> itemList) {
         con = context;
@@ -50,6 +54,7 @@ public class FeedAdapter extends BaseAdapter {
         int width = size.x;
         int height = size.y;
         imageLoader = new ImageLoader(con.getApplicationContext(),width,height);
+       // gridLayoutManager = new GridLayoutManager(con, 2);
     }
     @Override
     public int getCount() {
@@ -66,6 +71,29 @@ public class FeedAdapter extends BaseAdapter {
         return 0;
     }
 
+//    public ArrayList<String> getFilePaths()
+//    {
+//        ArrayList<String> paths = new ArrayList<String>();
+//        for(int i = 0 ; i< urls.size();i++)
+//        {
+//            paths.add(imageLoader.getFilePath(urls.get(i)));
+//        }
+//        return paths;
+//    }
+
+    private static class CustomSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
+        @Override
+        public int getSpanSize(int i) {
+
+            if(i == 0 || i == 1) {
+                // grid items on positions 0 and 1 will occupy 2 spans of the grid
+                return 2;
+            } else {
+                // the rest of the items will behave normally and occupy only 1 span
+                return 1;
+            }
+        }
+    }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
        ItemHolder itemHolder;
@@ -80,13 +108,83 @@ public class FeedAdapter extends BaseAdapter {
 
             itemHolder = new ItemHolder();
             itemHolder.description= (TextView) view.findViewById(R.id.feed_description);
-            itemHolder.imageView= (ImageView) view.findViewById(R.id.vendor_image_view);
+//            itemHolder.imageView= (ImageView) view.findViewById(R.id.vendor_image_view);
+            itemHolder.recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
             itemHolder.feedheading= (TextView) view.findViewById(R.id.feed_name);
             itemHolder.btShowmore=(Button)view.findViewById(R.id.btShowmore);
+            itemHolder.imageshareButton= (ImageView)view.findViewById(R.id.shareit);
+            // specify that grid will consist of 2 columns
+
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(con, 2);
+            // provide our CustomSpanSizeLookup which determines how many spans each item in grid will occupy
+            gridLayoutManager.setSpanSizeLookup(new CustomSpanSizeLookup());
+            // provide our GridLayoutManager to the view
+            itemHolder.recyclerView.setLayoutManager(gridLayoutManager);
+            // this is fake list of images
+
+
+
+
             view.setTag(itemHolder);
         }else{
             itemHolder = (ItemHolder) view.getTag();
         }
+        itemHolder.imageshareButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+
+                ArrayList<Uri> imageUris = new ArrayList<Uri>();
+
+
+                Intent shareIntent = new Intent();
+                // shareIntent.setType("text/html");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT,  mFeedList.get(position).getHeading());
+                shareIntent.putExtra(Intent.EXTRA_TEXT,  mFeedList.get(position).getDescription());
+                if(mFeedList.get(position).getFeedimages().size()> 0) {
+                    shareIntent.setType("image/*");
+
+                    if (mFeedList.get(position).getFeedimages().size() > 0) {
+                        imageUris.add(Uri.parse(imageLoader.getFilePath(mFeedList.get(position).getFeedimages().get(0))));
+                        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+                    }
+                }
+                else
+                {
+                    shareIntent.setType("text/plain");
+                }
+                shareIntent.setAction(Intent.ACTION_SEND);
+                con.startActivity(Intent.createChooser(shareIntent, "Share it ...."));
+                //startActivity(Intent.createChooser(sendIntent, "Share link!"));
+            }
+        });
+        if(mFeedList.get(position).getFeedimages().size()> 0) {
+            Adapter adapter = new Adapter(con, mFeedList.get(position).getFeedimages());
+            itemHolder.recyclerView.setAdapter(adapter);
+            itemHolder.recyclerView.addOnItemTouchListener(
+                    new RecyclerItemClickListener(con, itemHolder.recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override public void onItemClick(View view, int position2) {
+                            Intent i = new Intent(con, SingleViewActivity.class);
+                            i.putExtra("url", mFeedList.get(position).getFeedimages().get(position2));
+                            con.startActivity(i);
+                            // do whatever
+                            //mFeedList.get(position).getFeedimages().get(position2);
+                            //    Toast.makeText(con,"hi click"+position2+mFeedList.get(position).getFeedimages().get(position2), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override public void onLongItemClick(View view, int position2) {
+
+
+                        }
+                    })
+            );
+        }
+        else
+        {
+            itemHolder.recyclerView.setVisibility(View.GONE);
+        }
+
         itemHolder.btShowmore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,13 +200,7 @@ public class FeedAdapter extends BaseAdapter {
         itemHolder.description.setText(mFeedList.get(position).getDescription());
 
         itemHolder.feedheading.setText(mFeedList.get(position).getHeading());
-//        itemHolder.description.post(new Runnable() {
-//            @Override
-//            public void run() {
-//               // int lineCount = itemHolder.description.getLineCount();
-//                // Use lineCount here
-//            }
-//        });
+
         if(mFeedList.get(position).getDescription().length() > 500 )
         {
             itemHolder.description.setMaxLines(5);
@@ -118,10 +210,6 @@ public class FeedAdapter extends BaseAdapter {
         {
             itemHolder.btShowmore.setVisibility(View.GONE);
         }
-        //makeTextViewResizable(itemHolder.description, 3, "View More", true);
-        //String image_url = "http://www.prajavani.net/sites/default/files/article_images/2017/10/24/kbec27rain.jpg";
-        imageLoader.DisplayImage(mFeedList.get(position).getFeedimages(), itemHolder.imageView);
-
         return view;
 
     }
@@ -130,6 +218,8 @@ public class FeedAdapter extends BaseAdapter {
         TextView feedheading;
         ImageView imageView;
         Button btShowmore;
+        RecyclerView recyclerView;
+        ImageView imageshareButton;
     }
 
 

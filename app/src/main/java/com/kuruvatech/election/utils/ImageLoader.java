@@ -7,6 +7,7 @@ package com.kuruvatech.election.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -61,13 +62,13 @@ public class ImageLoader {
     // default image show in list (Before online image download)
     final int stub_id= R.drawable.logo;
 
-    public void DisplayImage(ArrayList<String> url, ImageView imageView)
+    public void DisplayImage(String url, ImageView imageView)
     {
         //Store image and url in Map
-        imageViews.put(imageView, url.get(0));
+        imageViews.put(imageView, url);
 
         //Check image is stored in MemoryCache Map or not (see MemoryCache.java)
-        Bitmap bitmap = memoryCache.get( url.get(0));
+        Bitmap bitmap = memoryCache.get( url);
 
         if(bitmap!=null){
             // if image is stored in MemoryCache Map then
@@ -77,13 +78,44 @@ public class ImageLoader {
         else
         {
             //queue Photo to download from url
-            queuePhoto( url.get(0), imageView);
+            queuePhoto( url, imageView);
 
             //Before downloading image show default image
             imageView.setImageResource(stub_id);
         }
     }
+    private Bitmap createSingleImageFromMultipleImages(Bitmap firstImage, Bitmap secondImage){
 
+        Bitmap result = Bitmap.createBitmap(firstImage.getWidth(), firstImage.getHeight(), firstImage.getConfig());
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(firstImage, 0f, 0f, null);
+        canvas.drawBitmap(secondImage, 10, 10, null);
+        return result;
+    }
+    public void DisplayMultipleImages(ArrayList<String> url, ImageView imageView)
+    {
+        //Store image and url in Map
+        ArrayList<Bitmap> bitmaparray = new ArrayList<Bitmap>();
+        for(int i = 0; i < url.size(); i++) {
+            imageViews.put(imageView, url.get(i));
+
+
+            //Check image is stored in MemoryCache Map or not (see MemoryCache.java)
+            Bitmap bitmap = memoryCache.get(url.get(i));
+
+            if (bitmap != null) {
+                // if image is stored in MemoryCache Map then
+                // Show image in listview row
+                imageView.setImageBitmap(bitmap);
+            } else {
+                //queue Photo to download from url
+                queuePhoto(url.get(i), imageView);
+
+                //Before downloading image show default image
+                imageView.setImageResource(stub_id);
+            }
+        }
+    }
     private void queuePhoto(String url, ImageView imageView)
     {
         // Store image and url in PhotoToLoad object
@@ -143,6 +175,10 @@ public class ImageLoader {
         }
     }
 
+    public String getFilePath(String url)
+    {
+        return fileCache.getFile(url).getAbsolutePath();
+    }
     private Bitmap getBitmap(String url)
     {
         File f=fileCache.getFile(url);
