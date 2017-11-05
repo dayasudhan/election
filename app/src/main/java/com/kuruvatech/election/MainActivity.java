@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Mint.initAndStartSession(this, "49d903c2");
+        Mint.enableLogging(true);
+        Mint.setLogging(100, "*:W");
         session = new SessionManager(getApplicationContext());
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -132,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
 //        name.setText(session.getName());
 //        phno.setText(session.getKeyPhone());
 //        email.setText(session.getEmail());
-
         transaction.replace(R.id.frame, new MainFragment());
         transaction.commit();
 
