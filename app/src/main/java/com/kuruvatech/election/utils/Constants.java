@@ -5,7 +5,7 @@ public class Constants {
 
     public static final String LOCALHOST = "http://192.168.1.104:3000";
 
-    public static final String RELEASE_URL = "http://oota.herokuapp.com";
+    public static final String RELEASE_URL = "http://chunavane.herokuapp.com";
     public static final String DEBUG_URL = "http://chunavane.herokuapp.com";
 
     public static final String MAIN_URL = DEBUG_URL;

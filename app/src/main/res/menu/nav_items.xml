@@ -7,19 +7,21 @@
               <!--android:icon="@drawable/ic_action_fab" />-->
 
         <item android:id="@+id/main"
-            android:title="Invite"
-            android:icon="@drawable/pinvitation" />
+            android:title="Home"
+            android:icon="@mipmap/ic_nav_home_congress" />
         <item android:id="@+id/notification"
-            android:title="Notifications"
-            android:icon="@drawable/pnotifications" />
-
+            android:title="Images"
+            android:icon="@mipmap/ic_nav_image_congress" />
+        <item android:id="@+id/videos"
+            android:title="Video"
+            android:icon="@mipmap/ic_nav_video_congress" />
         <item android:id="@+id/invite"
-            android:title="Invite"
-            android:icon="@drawable/pinvitation" />
+            android:title="Share This App"
+            android:icon="@mipmap/ic_nav_share_congress" />
 
-        <item android:id="@+id/about_Candidate"
-            android:title="Help"
-            android:icon="@drawable/phelp" />
+        <item android:id="@+id/About_Candidate"
+            android:title="About"
+            android:icon="@mipmap/ic_nav_info_congress" />
 
     </group>
 </menu>

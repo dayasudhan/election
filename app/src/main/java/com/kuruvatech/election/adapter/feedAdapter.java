@@ -13,12 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.gson.Gson;
@@ -30,7 +28,6 @@ import com.kuruvatech.election.model.FeedItem;
 import com.kuruvatech.election.utils.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by gagan on 10/23/2017.
@@ -82,14 +79,24 @@ public class FeedAdapter extends BaseAdapter {
 //    }
 
     private static class CustomSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
+        private int totalcount;
+        public CustomSpanSizeLookup(int total)
+        {
+            totalcount = total;
+        }
         @Override
         public int getSpanSize(int i) {
 
-            if(i == 0 || i == 1) {
+            if(i == 0 ) {
                 // grid items on positions 0 and 1 will occupy 2 spans of the grid
                 return 2;
-            } else {
+            } else if(totalcount%2 == 0 && i == 1){
                 // the rest of the items will behave normally and occupy only 1 span
+
+                return 2;
+            }
+            else
+            {
                 return 1;
             }
         }
@@ -115,12 +122,6 @@ public class FeedAdapter extends BaseAdapter {
             itemHolder.imageshareButton= (ImageView)view.findViewById(R.id.shareit);
             // specify that grid will consist of 2 columns
 
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(con, 2);
-            // provide our CustomSpanSizeLookup which determines how many spans each item in grid will occupy
-            gridLayoutManager.setSpanSizeLookup(new CustomSpanSizeLookup());
-            // provide our GridLayoutManager to the view
-            itemHolder.recyclerView.setLayoutManager(gridLayoutManager);
-            // this is fake list of images
 
 
 
@@ -129,6 +130,13 @@ public class FeedAdapter extends BaseAdapter {
         }else{
             itemHolder = (ItemHolder) view.getTag();
         }
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(con, 2);
+        // provide our CustomSpanSizeLookup which determines how many spans each item in grid will occupy
+        gridLayoutManager.setSpanSizeLookup(new CustomSpanSizeLookup(mFeedList.get(position).getFeedimages().size()));
+        // provide our GridLayoutManager to the view
+        itemHolder.recyclerView.setLayoutManager(gridLayoutManager);
+        // this is fake list of images
+
         itemHolder.imageshareButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -149,6 +157,7 @@ public class FeedAdapter extends BaseAdapter {
                         imageUris.add(Uri.parse(imageLoader.getFilePath(mFeedList.get(position).getFeedimages().get(0))));
                         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
                     }
+
                 }
                 else
                 {
@@ -163,11 +172,14 @@ public class FeedAdapter extends BaseAdapter {
             Adapter adapter = new Adapter(con, mFeedList.get(position).getFeedimages());
             itemHolder.recyclerView.setAdapter(adapter);
             itemHolder.recyclerView.addOnItemTouchListener(
-                    new RecyclerItemClickListener(con, itemHolder.recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                        @Override public void onItemClick(View view, int position2) {
-                            Intent i = new Intent(con, SingleViewActivity.class);
-                            i.putExtra("url", mFeedList.get(position).getFeedimages().get(position2));
-                            con.startActivity(i);
+                    new RecyclerItemClickListener(con, position,itemHolder.recyclerView ,
+                            new RecyclerItemClickListener.OnItemClickListener() {
+                                @Override public void onItemClick(View view, int position2, int myposition) {
+                                    Intent i = new Intent(con, SingleViewActivity.class);
+
+                                    i.putExtra("url", mFeedList.get(myposition).getFeedimages().get(position2));
+
+                                    con.startActivity(i);
                             // do whatever
                             //mFeedList.get(position).getFeedimages().get(position2);
                             //    Toast.makeText(con,"hi click"+position2+mFeedList.get(position).getFeedimages().get(position2), Toast.LENGTH_LONG).show();

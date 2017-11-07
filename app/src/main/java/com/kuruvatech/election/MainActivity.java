@@ -36,7 +36,8 @@ import com.kuruvatech.election.fragment.MainFragment;
 import com.kuruvatech.election.fragment.ShareAppFragment;
 import com.kuruvatech.election.utils.SessionManager;
 import com.splunk.mint.Mint;
-
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 //import com.google.android.gms.appindexing.AppIndex;
 //import com.google.android.gms.common.api.GoogleApiClient;
 //import com.splunk.mint.Mint;
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setNavigationDrawer();
         setToolBar();
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+
         if (!checkNotificationListenerServiceRunning()) {
             Toast.makeText(getApplicationContext(),"hi update 1",Toast.LENGTH_LONG).show();
             startService(new Intent(this, NotificationListener.class));
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+            ab.setHomeAsUpIndicator(R.mipmap.ic_menu_selector);
             ab.setDisplayHomeAsUpEnabled(true);
         }
     }

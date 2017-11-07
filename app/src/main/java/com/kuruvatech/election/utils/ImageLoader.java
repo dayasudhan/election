@@ -60,7 +60,7 @@ public class ImageLoader {
     }
 
     // default image show in list (Before online image download)
-    final int stub_id= R.drawable.logo;
+    final int stub_id= R.drawable.profile;
 
     public void DisplayImage(String url, ImageView imageView)
     {

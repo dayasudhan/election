@@ -141,7 +141,7 @@ public class NotificationListener extends Service {
 //
 //        }
 
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=khaanavali.customer"));
+        intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=khaanavali.customer"));
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(pendingIntent);

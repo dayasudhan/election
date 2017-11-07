@@ -54,6 +54,10 @@ public class Adapter extends RecyclerView.Adapter {
         return paths;
     }
 
+    public ArrayList<String> getImages()
+    {
+        return urls;
+    }
     @Override
     public int getItemCount() {
         return urls.size();

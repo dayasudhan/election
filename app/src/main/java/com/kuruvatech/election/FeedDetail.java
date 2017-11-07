@@ -10,10 +10,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.kuruvatech.election.adapter.Adapter;
@@ -52,8 +50,8 @@ public class FeedDetail extends AppCompatActivity {
         adapter = new Adapter(this,feedItem.getFeedimages());
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(),recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position2) {
+                new RecyclerItemClickListener(getApplicationContext(),0,recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position2, int myposition) {
                         Intent i = new Intent(getApplicationContext(), SingleViewActivity.class);
                         i.putExtra("url", feedItem.getFeedimages().get(position2));
                         startActivity(i);
@@ -117,7 +115,7 @@ public class FeedDetail extends AppCompatActivity {
                 //startActivity(Intent.createChooser(sendIntent, "Share link!"));
             }
         });
-        setToolBar("Register");
+        setToolBar(getString(R.string.titletext));
     } //9740668897
 
     private void setToolBar(String areaClicked) {
@@ -125,7 +123,7 @@ public class FeedDetail extends AppCompatActivity {
         setSupportActionBar(tb);
 
         ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_action_back);
+        ab.setHomeAsUpIndicator(R.mipmap.ic_menu_selector);
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle(areaClicked);
         tb.setTitleTextColor(Color.rgb(Constants.TITLE_TEXT_COLOR_RED,

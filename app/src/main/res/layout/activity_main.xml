@@ -21,7 +21,7 @@ android:elevation="7dp">
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
+        android:background="@color/congress_toolbar"
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -42,7 +42,7 @@ android:elevation="7dp">
     android:layout_gravity="start"
     app:menu="@menu/nav_items"
     android:clickable="true"
-    app:itemIconTint="@color/titleTextColor"
+    app:itemIconTint="@color/congress_toolbar"
     />
 
 

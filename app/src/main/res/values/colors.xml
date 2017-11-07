@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="congress_toolbar">#33ABF9</color>
     <color name="gaganprimary">#F5F5F5</color>
     <color name="gaganparrotgreen6">#f6f6f6</color>
     <color name="backgroundgagan">#e9e9e9</color>
