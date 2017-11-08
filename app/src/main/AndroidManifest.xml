@@ -40,6 +40,14 @@
             android:name=".FeedDetail"
             android:configChanges="orientation|keyboardHidden|screenSize"></activity>
         <activity android:name=".SingleViewActivity"></activity>
+        <activity android:name=".YouTubePlayerAcivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
+        <activity android:name=".MinimalPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
+        <activity android:name=".CustomPlayerControlActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
+        <activity android:name=".YouTubePlayerFragmentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

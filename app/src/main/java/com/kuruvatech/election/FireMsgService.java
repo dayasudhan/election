@@ -27,12 +27,13 @@ public class FireMsgService extends FirebaseMessagingService {
         // Create Notification
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("notificationFragment", "fcm");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1410, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_dgs)
                 .setContentTitle("Message")
                 .setContentText(remoteMessage.getNotification().getBody())
                 .setAutoCancel(true)

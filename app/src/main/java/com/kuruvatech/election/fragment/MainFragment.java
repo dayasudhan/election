@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,6 +59,7 @@ public class MainFragment extends Fragment {
     View rootview;
     ListView listView;
     TextView noFeedstv;
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,10 +67,21 @@ public class MainFragment extends Fragment {
         rootview = inflater.inflate(R.layout.fragment_main, container, false);
         listView = (ListView) rootview.findViewById(R.id.listView_feedlist);
         noFeedstv = (TextView)rootview.findViewById(R.id.textView_no_feeds);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.swipe_refresh_layout);
         ((MainActivity) getActivity())
                 .setActionBarTitle(getString(R.string.titletext));
 
         getFeeds();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getFeeds();
+            }
+
+        });
+
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, R.color.colorAccent, R.color.colorPrimaryDark);
+        swipeRefreshLayout.setProgressBackgroundColor(android.R.color.transparent);
        return rootview;
     }
     @Override
@@ -94,7 +107,6 @@ public class MainFragment extends Fragment {
     {
         String getFeedsUrl = Constants.GET_FEEDS_URL;
         getFeedsUrl = getFeedsUrl + getString(R.string.username);
-        Toast.makeText(getActivity().getApplicationContext(), getFeedsUrl, Toast.LENGTH_LONG).show();
         new JSONAsyncTask().execute(getFeedsUrl);
     }
     public  class JSONAsyncTask extends AsyncTask<String, Void, Boolean> {
@@ -180,6 +192,7 @@ public class MainFragment extends Fragment {
         }
         protected void onPostExecute(Boolean result) {
             dialog.cancel();
+            swipeRefreshLayout.setRefreshing(false);
             if(getActivity() != null) {
                 if (result == false) {
 
@@ -187,6 +200,7 @@ public class MainFragment extends Fragment {
                     alertMessage("Unable to fetch data from server");
                 } else {
                     initAdapter();
+
                 }
             }
 

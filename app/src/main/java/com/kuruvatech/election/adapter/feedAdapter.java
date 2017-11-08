@@ -180,6 +180,7 @@ public class FeedAdapter extends BaseAdapter {
                                     i.putExtra("url", mFeedList.get(myposition).getFeedimages().get(position2));
 
                                     con.startActivity(i);
+
                             // do whatever
                             //mFeedList.get(position).getFeedimages().get(position2);
                             //    Toast.makeText(con,"hi click"+position2+mFeedList.get(position).getFeedimages().get(position2), Toast.LENGTH_LONG).show();

@@ -123,11 +123,11 @@ public class FeedDetail extends AppCompatActivity {
         setSupportActionBar(tb);
 
         ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.mipmap.ic_menu_selector);
+        ab.setHomeAsUpIndicator(R.mipmap.ic_back);
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle(areaClicked);
-        tb.setTitleTextColor(Color.rgb(Constants.TITLE_TEXT_COLOR_RED,
-                Constants.TITLE_TEXT_COLOR_GREEN, Constants.TITLE_TEXT_COLOR_BLUE));
+//        tb.setTitleTextColor(Color.rgb(Constants.TITLE_TEXT_COLOR_RED,
+//                Constants.TITLE_TEXT_COLOR_GREEN, Constants.TITLE_TEXT_COLOR_BLUE));
     }
 
     @Override

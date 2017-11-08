@@ -5,8 +5,8 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/primary"
-    android:textColor="@color/titleTextColor"
+    android:background="@color/congress_toolbar"
+    android:textColor="@color/black"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 

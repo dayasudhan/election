@@ -75,16 +75,24 @@ public class MainActivity extends AppCompatActivity {
         setToolBar();
         FirebaseMessaging.getInstance().subscribeToTopic("news");
 
-        if (!checkNotificationListenerServiceRunning()) {
-            Toast.makeText(getApplicationContext(),"hi update 1",Toast.LENGTH_LONG).show();
-            startService(new Intent(this, NotificationListener.class));
+//        if (!checkNotificationListenerServiceRunning()) {
+//            Toast.makeText(getApplicationContext(),"hi update 1",Toast.LENGTH_LONG).show();
+//            startService(new Intent(this, NotificationListener.class));
+//        }
+//        else
+//        {
+//            Toast.makeText(getApplicationContext(),"hi update 2",Toast.LENGTH_LONG).show();
+//        }
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        notificationManager.cancelAll();
+        String notification=getIntent().getStringExtra("notificationFragment");
+        if (notification!=null &&notification.equals("fcm")) {
+            try {
+                MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.frame);
+                fragment.getFeeds();
+            } catch (ClassCastException e){
+            }
         }
-        else
-        {
-            Toast.makeText(getApplicationContext(),"hi update 2",Toast.LENGTH_LONG).show();
-        }
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
         if (!isOnline(MainActivity.this))
         {
             try {
@@ -150,6 +158,22 @@ public class MainActivity extends AppCompatActivity {
                     frag = new MainFragment();
                 }else if (itemId == R.id.invite) {
                     frag = new ShareAppFragment();
+                }
+                else if(itemId == R.id.videos)
+                {
+                    startActivity(new Intent(getApplicationContext(),CustomPlayerControlActivity.class));
+                }
+                else if(itemId == R.id.videos2)
+                {
+                    startActivity(new Intent(getApplicationContext(),MinimalPlayerActivity.class));
+                }
+                else if(itemId == R.id.videos3)
+                {
+                    startActivity(new Intent(getApplicationContext(),YouTubePlayerFragmentActivity.class));
+                }
+                else if(itemId == R.id.videos4)
+                {
+                    startActivity(new Intent(getApplicationContext(),YouTubePlayerAcivity.class));
                 }
                 if (frag != null) {
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
