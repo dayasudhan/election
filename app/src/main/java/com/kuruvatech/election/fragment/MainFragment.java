@@ -1,26 +1,31 @@
 package com.kuruvatech.election.fragment;
 
 import android.app.Dialog;
+
 import android.content.DialogInterface;
-import android.content.Intent;
+
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
 import com.kuruvatech.election.FeedDetail;
 import com.kuruvatech.election.MainActivity;
@@ -46,24 +51,28 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment{
     private static final String TAG_FEEDS = "feeds";
     private static final String TAG_ID = "id";
     private static final String TAG_HEADING = "heading";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_FEEDIMAGES = "feedimages";
     private static final String TAG_URL = "url";
+    public static final String API_KEY = "AIzaSyBRLKO5KlEEgFjVgf4M-lZzeGXW94m9w3U";
+    public static final String VIDEO_ID = "gy5_T2ACerk";
     Button btnshareApp;
     ArrayList<FeedItem> feedList;
     FeedAdapter adapter;
     View rootview;
     ListView listView;
     TextView noFeedstv;
+
     private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         rootview = inflater.inflate(R.layout.fragment_main, container, false);
         listView = (ListView) rootview.findViewById(R.id.listView_feedlist);
         noFeedstv = (TextView)rootview.findViewById(R.id.textView_no_feeds);
@@ -82,8 +91,12 @@ public class MainFragment extends Fragment {
 
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, R.color.colorAccent, R.color.colorPrimaryDark);
         swipeRefreshLayout.setProgressBackgroundColor(android.R.color.transparent);
+
        return rootview;
     }
+
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -109,7 +122,9 @@ public class MainFragment extends Fragment {
         getFeedsUrl = getFeedsUrl + getString(R.string.username);
         new JSONAsyncTask().execute(getFeedsUrl);
     }
-    public  class JSONAsyncTask extends AsyncTask<String, Void, Boolean> {
+
+
+public  class JSONAsyncTask extends AsyncTask<String, Void, Boolean> {
         Dialog dialog;
         public JSONAsyncTask() {
 
@@ -191,7 +206,9 @@ public class MainFragment extends Fragment {
 
         }
         protected void onPostExecute(Boolean result) {
-            dialog.cancel();
+            if(dialog != null)
+                dialog.cancel();
+            if(swipeRefreshLayout != null)
             swipeRefreshLayout.setRefreshing(false);
             if(getActivity() != null) {
                 if (result == false) {

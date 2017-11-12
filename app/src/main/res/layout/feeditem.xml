@@ -46,11 +46,30 @@
         android:layout_below="@+id/feed_name"
         android:layout_alignLeft="@+id/feed_name"
         android:layout_alignStart="@+id/feed_name" />
-
+    <com.google.android.youtube.player.YouTubeThumbnailView
+        android:id="@+id/youtubethumbnailview"
+        android:layout_below="@+id/feed_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
+    <!--<fragment-->
+        <!--android:id="@+id/youtube_frag"-->
+        <!--android:name="com.google.android.youtube.player.YouTubePlayerFragment"-->
+        <!--android:layout_below="@id/feed_description"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginBottom="5dp"-->
+    <ImageView
+        android:id="@+id/iv_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play" />
+        <!--/>-->
     <Button
         android:id="@+id/btShowmore"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/feed_description"
+        android:layout_below="@+id/youtubethumbnailview"
         android:text="Showmore..."
         android:textAllCaps="false"
         android:textColor="@android:color/holo_blue_light"

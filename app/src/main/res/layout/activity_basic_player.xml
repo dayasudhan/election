@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.stacktips.youtube.MainActivity">
+    tools:context="com.kuruvatech.election.YouTubePlayerAcivity">
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_player_view"
