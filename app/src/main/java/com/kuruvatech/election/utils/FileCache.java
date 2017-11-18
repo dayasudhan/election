@@ -20,8 +20,24 @@ public class FileCache {
         if (true)
         {
             //if SDCARD is mounted (SDCARD is present on device and mounted)
-            cacheDir = new File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath(),"LazyList");
+//            cacheDir = new File(
+//                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath(),"LazyList");
+          //  Environment.getExternalStoragePublicDirectory
+            //Find the dir to save cached images
+            String directory = "LazyList";
+            String  path = Environment.getDataDirectory().getAbsolutePath().toString()+ "/YourDirectoryName";
+            if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+                cacheDir=new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath(),"LazyList");
+            else
+            {
+                cacheDir = context.getDir(directory, Context.MODE_PRIVATE); //Creating an internal directry
+               // cacheDir = new File(path);
+//                if(!mydir.exists())           //check if not created then create the firectory
+//                    mydir.mkdirs();
+            }
+//                cacheDir=context.getFilesDir();
+            if(!cacheDir.exists())
+                cacheDir.mkdirs();
 
         }
 //        else
