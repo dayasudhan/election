@@ -9,13 +9,15 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.kuruvatech.election.adapter.Adapter;
+
 
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mListener;
     private int myposition;
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position, int myposition);
+        public void onItemClick(View view, int position, String myposition);
 
         public void onLongItemClick(View view, int position);
     }
@@ -35,6 +37,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
             public void onLongPress(MotionEvent e) {
                 View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
                 if (child != null && mListener != null) {
+
                     mListener.onLongItemClick(child, recyclerView.getChildAdapterPosition(child));
                 }
             }
@@ -44,7 +47,9 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     @Override public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
         View childView = view.findChildViewUnder(e.getX(), e.getY());
         if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
-            mListener.onItemClick(childView, view.getChildAdapterPosition(childView) ,myposition);
+            Adapter adapter= (Adapter) view.getAdapter();
+            int position = view.getChildAdapterPosition(childView);
+            mListener.onItemClick(childView, view.getChildAdapterPosition(childView) ,adapter.getImages().get(position));
             return true;
         }
         return false;

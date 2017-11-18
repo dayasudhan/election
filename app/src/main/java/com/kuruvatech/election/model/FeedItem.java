@@ -9,11 +9,16 @@ public class FeedItem {
     String description;
     String heading;
     ArrayList<String> feedimages;
+
+
+
+    String videoid;
     public FeedItem()
     {
         description = new String();
         heading = new String();
         feedimages = new ArrayList<String>();
+        videoid = new String();
     }
     public String getDescription() {
         return description;
@@ -37,5 +42,12 @@ public class FeedItem {
 
     public void setFeedimages(ArrayList<String> feedimages) {
         this.feedimages = feedimages;
+    }
+    public String getVideoid() {
+        return videoid;
+    }
+
+    public void setVideoid(String videoid) {
+        this.videoid = videoid;
     }
 }

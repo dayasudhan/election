@@ -17,7 +17,12 @@
     <declare-styleable name="CirclePageIndicator">
         <attr name="indicator_spacing" format="dimension" />
     </declare-styleable>
-    <style name="ProgressBarStyle" parent="@android:style/Widget.ProgressBar.Inverse"/>
+
+    <style name="ProgressBarStyle" parent="@android:style/Widget.ProgressBar.Inverse" />
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <!--gagan-->
 
 </resources>

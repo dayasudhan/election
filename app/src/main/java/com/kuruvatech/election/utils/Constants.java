@@ -11,6 +11,8 @@ public class Constants {
     public static final String MAIN_URL = DEBUG_URL;
 
     public static final String GET_FEEDS_URL = MAIN_URL + "/v1/feed/info/";
+    public static final String GET_IMAGES_URL = MAIN_URL + "/v1/feed/images/";
+    public static final String GET_VIDEOS_URL = MAIN_URL + "/v1/feed/videos/";
 
     public static final String FIREBASE_APP = "https://project-8598805513533999178.firebaseio.com";
     //To store the firebase id in shared preferences

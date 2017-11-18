@@ -1,6 +1,7 @@
 package com.kuruvatech.election;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import com.kuruvatech.election.utils.Constants;
 import com.kuruvatech.election.utils.ImageLoader;
 
+import java.util.ArrayList;
+
 public class SingleViewActivity extends AppCompatActivity {
 
     public ImageLoader imageLoader;
@@ -30,10 +33,28 @@ public class SingleViewActivity extends AppCompatActivity {
         Intent i = getIntent();
 
         // Selected image id
-        String url = i.getExtras().getString("url");
+        final String url = i.getExtras().getString("url");
 
         ImageView imageView = (ImageView) findViewById(R.id.SingleView);
+        ImageView imageShareView = (ImageView) findViewById(R.id.imagesharebutton2);
         imageLoader.DisplayImage(url, imageView);
+        imageShareView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                Intent shareIntent = new Intent();
+
+                ArrayList<Uri> imageUris = new ArrayList<Uri>();
+                imageUris.add(Uri.parse(url));
+                shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+                shareIntent.setType("image/*");
+                shareIntent.setAction(Intent.ACTION_SEND);
+                startActivity(Intent.createChooser(shareIntent, "Share it ...."));
+            }
+
+
+
+        });
         //setToolBar("ImageView");
 
     }

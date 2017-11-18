@@ -29,21 +29,13 @@ tools:context="com.kuruvatech.election.FeedDetail">
         android:id="@+id/order_details_lay"
         >
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/detail_vendor_image_view"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:background="@color/img_background"-->
-            <!--android:layout_below="@+id/detail_feed_description"-->
-            <!--android:layout_alignLeft="@+id/detail_feed_description"-->
-            <!--android:layout_alignStart="@+id/detail_feed_description"  />-->
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/detail_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/img_background"
-            android:layout_below="@+id/detail_feed_description"
+            android:layout_below="@+id/youtube_frame"
             android:layout_alignLeft="@+id/detail_feed_description"
             android:layout_alignStart="@+id/detail_feed_description"
             android:layout_alignParentRight="true"
@@ -74,7 +66,26 @@ tools:context="com.kuruvatech.election.FeedDetail">
             android:layout_alignLeft="@+id/feed_name"
             android:layout_alignStart="@+id/detail_feed_name" />
 
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/youtube_frame"
+            android:layout_below="@+id/detail_feed_description"
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+            <com.google.android.youtube.player.YouTubeThumbnailView
+                android:id="@+id/youtubethumbnailview"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"/>
+            <ImageView
+                android:id="@+id/play_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
+                android:layout_gravity="center"
+                android:src="@drawable/youtube_play"/>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/linear"

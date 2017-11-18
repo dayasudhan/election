@@ -6,15 +6,6 @@
     android:paddingBottom="10dp"
     android:background="@drawable/list_background" android:layout_height="match_parent">
 
-    <!--<ImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/vendor_image_view"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:background="@color/img_background"-->
-        <!--android:layout_below="@+id/btShowmore"-->
-        <!--android:layout_alignLeft="@+id/feed_description"-->
-        <!--android:layout_alignStart="@+id/feed_description"  />-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -46,30 +37,31 @@
         android:layout_below="@+id/feed_name"
         android:layout_alignLeft="@+id/feed_name"
         android:layout_alignStart="@+id/feed_name" />
-    <com.google.android.youtube.player.YouTubeThumbnailView
-        android:id="@+id/youtubethumbnailview"
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/youtube_frame"
         android:layout_below="@+id/feed_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp" />
-    <!--<fragment-->
-        <!--android:id="@+id/youtube_frag"-->
-        <!--android:name="com.google.android.youtube.player.YouTubePlayerFragment"-->
-        <!--android:layout_below="@id/feed_description"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="150dp"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_marginBottom="5dp"-->
-    <ImageView
-        android:id="@+id/iv_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_play" />
-        <!--/>-->
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+            <com.google.android.youtube.player.YouTubeThumbnailView
+                android:id="@+id/youtubethumbnailview"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"/>
+            <ImageView
+                android:id="@+id/play_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="center"
+                android:src="@drawable/youtube_play"/>
+    </FrameLayout>
+
     <Button
         android:id="@+id/btShowmore"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/youtubethumbnailview"
+        android:layout_below="@+id/youtube_frame"
         android:text="Showmore..."
         android:textAllCaps="false"
         android:textColor="@android:color/holo_blue_light"

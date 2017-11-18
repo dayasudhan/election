@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,10 +26,13 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
+import com.kuruvatech.election.CustomPlayerControlActivity;
 import com.kuruvatech.election.FeedDetail;
 import com.kuruvatech.election.R;
 import com.kuruvatech.election.RecyclerItemClickListener;
 import com.kuruvatech.election.SingleViewActivity;
+import com.kuruvatech.election.YouTubePlayerAcivity;
+import com.kuruvatech.election.YouTubePlayerFragmentActivity;
 import com.kuruvatech.election.model.FeedItem;
 import com.kuruvatech.election.utils.ImageLoader;
 
@@ -37,18 +41,17 @@ import java.util.ArrayList;
 /**
  * Created by gagan on 10/23/2017.
  */
-public class FeedAdapter extends BaseAdapter implements YouTubePlayer.OnInitializedListener,YouTubeThumbnailView.OnInitializedListener{
-
+public class FeedAdapter extends BaseAdapter implements YouTubeThumbnailView.OnInitializedListener{
     Activity con;
     Typeface cr;
     int layoutResID;
     private ArrayList<FeedItem> mFeedList;
     public ImageLoader imageLoader;
-    private YouTubePlayer youTubePlayer;
+
     private YouTubeThumbnailView youTubeThumbnailView;
     private YouTubeThumbnailLoader youTubeThumbnailLoader;
     public static final String API_KEY = "AIzaSyBRLKO5KlEEgFjVgf4M-lZzeGXW94m9w3U";
-    public static final String VIDEO_ID = "gy5_T2ACerk";
+    // public static final String VIDEO_ID = "gy5_T2ACerk";
 
     public FeedAdapter(Activity context, int layoutResourceID,
                        ArrayList<FeedItem> itemList) {
@@ -80,73 +83,20 @@ public class FeedAdapter extends BaseAdapter implements YouTubePlayer.OnInitiali
     @Override
     public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView,
                                         YouTubeThumbnailLoader thumbnailLoader) {
-        Toast.makeText(con,
-                "YouTubeThumbnailView.onInitializationSuccess()",
-                Toast.LENGTH_LONG).show();
 
         youTubeThumbnailLoader = thumbnailLoader;
-        youTubeThumbnailLoader.setOnThumbnailLoadedListener(new ThumbnailLoadedListener());
-
-        youTubeThumbnailLoader.setVideo(VIDEO_ID);
+//        youTubeThumbnailLoader.setOnThumbnailLoadedListener(new ThumbnailLoadedListener());
+        youTubeThumbnailLoader.setVideo(String.valueOf(youTubeThumbnailView.getTag()));
     }
 
 
     @Override
     public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(con,
-                "YouTubeThumbnailView.onInitializationFailure()",
-                Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-        youTubePlayer = youTubePlayer;
 
-        Toast.makeText(con,
-                "YouTubePlayer.onInitializationSuccess()",
-                Toast.LENGTH_LONG).show();
 
-        if (!b) {
-            youTubePlayer.cueVideo(VIDEO_ID);
-        }
-    }
 
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(con,
-                "YouTubePlayer.onInitializationFailure()",
-                Toast.LENGTH_LONG).show();
-    }
-
-    private final class ThumbnailLoadedListener implements
-            YouTubeThumbnailLoader.OnThumbnailLoadedListener {
-
-        @Override
-        public void onThumbnailError(YouTubeThumbnailView arg0, YouTubeThumbnailLoader.ErrorReason arg1) {
-            Toast.makeText(con,
-                    "ThumbnailLoadedListener.onThumbnailError()",
-                    Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onThumbnailLoaded(YouTubeThumbnailView arg0, String arg1) {
-            Toast.makeText(con,
-                    "ThumbnailLoadedListener.onThumbnailLoaded()",
-                    Toast.LENGTH_LONG).show();
-
-        }
-
-    }
-
-//    public ArrayList<String> getFilePaths()
-//    {
-//        ArrayList<String> paths = new ArrayList<String>();
-//        for(int i = 0 ; i< urls.size();i++)
-//        {
-//            paths.add(imageLoader.getFilePath(urls.get(i)));
-//        }
-//        return paths;
-//    }
 
     private static class CustomSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
         private int totalcount;
@@ -191,34 +141,54 @@ public class FeedAdapter extends BaseAdapter implements YouTubePlayer.OnInitiali
             itemHolder.btShowmore=(Button)view.findViewById(R.id.btShowmore);
             itemHolder.imageshareButton= (ImageView)view.findViewById(R.id.shareit);
             // specify that grid will consist of 2 columns
+            itemHolder.frameLayout = (FrameLayout)view.findViewById(R.id.youtube_frame);
+            itemHolder.imagePlayBotton = (ImageView) view.findViewById(R.id.play_video);
+            if( mFeedList.get(position).getVideoid().length() > 0) {
+                youTubeThumbnailView = (YouTubeThumbnailView)view.findViewById(R.id.youtubethumbnailview);
+                youTubeThumbnailView.setTag(mFeedList.get(position).getVideoid());
+                youTubeThumbnailView.initialize(API_KEY, this);
+                youTubeThumbnailView.setOnClickListener(new View.OnClickListener(){
 
-            youTubeThumbnailView = (YouTubeThumbnailView)view.findViewById(R.id.youtubethumbnailview);
-            youTubeThumbnailView.setTag(VIDEO_ID);
-            youTubeThumbnailView.initialize(API_KEY, this);
-            youTubeThumbnailView.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View arg0) {
-                    if(youTubePlayer != null){
-                        youTubePlayer.play();
-                    }
-                }});
-
-
-
+                    @Override
+                    public void onClick(View arg0) {
+                        Intent i = new Intent(con, YouTubePlayerFragmentActivity.class);
+                        i.putExtra("VIDEO_ID", mFeedList.get(position).getVideoid());
+                        con.startActivity(i);
+                    }});
+            }
+            else {
+                itemHolder.frameLayout.setVisibility(View.GONE);
+                itemHolder.imagePlayBotton.setVisibility(View.GONE);
+            }
             view.setTag(itemHolder);
         }else{
             itemHolder = (ItemHolder) view.getTag();
-            youTubeThumbnailView = (YouTubeThumbnailView)view.findViewById(R.id.youtubethumbnailview);
-         //   youTubeThumbnailLoader = loaders.get(youTubeThumbnailView);
-            if (youTubeThumbnailLoader == null) {
-                // Case 3 - The loader is currently initializing
-                youTubeThumbnailView.setTag(VIDEO_ID);
-            } else {
-                // Case 2 - The loader is already initialized
-                youTubeThumbnailView.setImageResource(R.drawable.circle_indicator_black);
-                youTubeThumbnailLoader.setVideo(VIDEO_ID);
+            if( mFeedList.get(position).getVideoid().length() > 0) {
+                youTubeThumbnailView = (YouTubeThumbnailView) view.findViewById(R.id.youtubethumbnailview);
+                if (youTubeThumbnailLoader == null) {
+                    // Case 3 - The loader is currently initializing
+                    youTubeThumbnailView.setTag(mFeedList.get(position).getVideoid());
+                } else {
+                    // Case 2 - The loader is already initialized
+                    youTubeThumbnailView.setImageResource(R.drawable.circle_indicator_black);
+                    youTubeThumbnailLoader.setVideo(mFeedList.get(position).getVideoid());
+                }
+                youTubeThumbnailView.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View arg0) {
+                        Intent i = new Intent(con, YouTubePlayerFragmentActivity.class);
+                        i.putExtra("VIDEO_ID", mFeedList.get(position).getVideoid());
+                        con.startActivity(i);
+
+                    }
+                });
             }
+            else {
+                itemHolder.frameLayout.setVisibility(View.GONE);
+                itemHolder.imagePlayBotton.setVisibility(View.GONE);
+            }
+
         }
         GridLayoutManager gridLayoutManager = new GridLayoutManager(con, 2);
         // provide our CustomSpanSizeLookup which determines how many spans each item in grid will occupy
@@ -261,27 +231,28 @@ public class FeedAdapter extends BaseAdapter implements YouTubePlayer.OnInitiali
         if(mFeedList.get(position).getFeedimages().size()> 0) {
             Adapter adapter = new Adapter(con, mFeedList.get(position).getFeedimages());
             itemHolder.recyclerView.setAdapter(adapter);
-//            itemHolder.recyclerView.addOnItemTouchListener(
-//                    new RecyclerItemClickListener(con, position,itemHolder.recyclerView ,
-//                            new RecyclerItemClickListener.OnItemClickListener() {
-//                                @Override public void onItemClick(View view, int position2, int myposition) {
-//                                    Intent i = new Intent(con, SingleViewActivity.class);
-//
-//                                    i.putExtra("url", mFeedList.get(myposition).getFeedimages().get(position2));
-//
-//                                    con.startActivity(i);
-//
-//                            // do whatever
-//                            //mFeedList.get(position).getFeedimages().get(position2);
-//                            //    Toast.makeText(con,"hi click"+position2+mFeedList.get(position).getFeedimages().get(position2), Toast.LENGTH_LONG).show();
-//                        }
-//
-//                        @Override public void onLongItemClick(View view, int position2) {
-//
-//
-//                        }
-//                    })
-//            );
+            itemHolder.recyclerView.addOnItemTouchListener(
+                    new RecyclerItemClickListener(con, position,itemHolder.recyclerView ,
+                            new RecyclerItemClickListener.OnItemClickListener() {
+
+                                @Override public void onItemClick(View view, int position2, String mypositionurl) {
+                                    Intent i = new Intent(con, SingleViewActivity.class);
+
+                                    i.putExtra("url", mypositionurl);
+
+                                    con.startActivity(i);
+
+                            // do whatever
+                            //mFeedList.get(position).getFeedimages().get(position2);
+                            //    Toast.makeText(con,"hi click"+position2+mFeedList.get(position).getFeedimages().get(position2), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override public void onLongItemClick(View view, int position2) {
+
+
+                        }
+                    })
+            );
         }
         else
         {
@@ -323,6 +294,8 @@ public class FeedAdapter extends BaseAdapter implements YouTubePlayer.OnInitiali
         Button btShowmore;
         RecyclerView recyclerView;
         ImageView imageshareButton;
+        FrameLayout frameLayout;;
+        ImageView imagePlayBotton;
     }
 
 

@@ -10,18 +10,24 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
 import com.kuruvatech.election.adapter.Adapter;
 import com.kuruvatech.election.model.FeedItem;
 import com.kuruvatech.election.utils.Constants;
 import com.kuruvatech.election.utils.ImageLoader;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 
 import java.util.ArrayList;
 
-public class FeedDetail extends AppCompatActivity {
+public class FeedDetail extends AppCompatActivity implements YouTubeThumbnailView.OnInitializedListener{
 
     FeedItem feedItem;
     TextView description;
@@ -31,6 +37,12 @@ public class FeedDetail extends AppCompatActivity {
    // Button btnBack;
     RecyclerView recyclerView;
     Adapter adapter;
+    FrameLayout frameLayout;;
+    ImageView imagePlayBotton;
+    private YouTubeThumbnailView youTubeThumbnailView;
+    private YouTubeThumbnailLoader youTubeThumbnailLoader;
+    public static final String API_KEY = "AIzaSyBRLKO5KlEEgFjVgf4M-lZzeGXW94m9w3U";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +53,7 @@ public class FeedDetail extends AppCompatActivity {
         feedItem = gson.fromJson(intent.getStringExtra("FeedItem"), FeedItem.class);
         description= (TextView) findViewById(R.id.detail_feed_description);
         imageshareButton= (ImageView) findViewById(R.id.detail_shareit );
-        feedheading= (TextView) findViewById(R.id.detail_feed_name);
+         feedheading= (TextView) findViewById(R.id.detail_feed_name);
         recyclerView = (RecyclerView) findViewById(R.id.detail_recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         // provide our CustomSpanSizeLookup which determines how many spans each item in grid will occupy
@@ -49,9 +61,30 @@ public class FeedDetail extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new Adapter(this,feedItem.getFeedimages());
         recyclerView.setAdapter(adapter);
+        frameLayout = (FrameLayout)findViewById(R.id.youtube_frame);
+        imagePlayBotton = (ImageView)findViewById(R.id.play_video);
+
+        if( feedItem.getVideoid().length() > 0) {
+            youTubeThumbnailView = (YouTubeThumbnailView)findViewById(R.id.youtubethumbnailview);
+            youTubeThumbnailView.setTag(feedItem.getVideoid());
+            youTubeThumbnailView.initialize(API_KEY, this);
+            youTubeThumbnailView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View arg0) {
+                    Intent i = new Intent(getApplicationContext(), YouTubePlayerFragmentActivity.class);
+                    i.putExtra("VIDEO_ID", feedItem.getVideoid());
+                    startActivity(i);
+                }});
+        }
+        else {
+            frameLayout.setVisibility(View.GONE);
+            imagePlayBotton.setVisibility(View.GONE);
+        }
+
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(),0,recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position2, int myposition) {
+                    @Override public void onItemClick(View view, int position2, String myposition) {
                         Intent i = new Intent(getApplicationContext(), SingleViewActivity.class);
                         i.putExtra("url", feedItem.getFeedimages().get(position2));
                         startActivity(i);
@@ -145,6 +178,19 @@ public class FeedDetail extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    @Override
+    public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
+        youTubeThumbnailLoader = youTubeThumbnailLoader;
+   //     youTubeThumbnailLoader.setOnThumbnailLoadedListener(new ThumbnailLoadedListener());
+        youTubeThumbnailLoader.setVideo(String.valueOf(youTubeThumbnailView.getTag()));
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+
+    }
+
     private static class CustomSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
         @Override
         public int getSpanSize(int i) {

@@ -32,8 +32,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kuruvatech.election.fragment.ImageFragment;
 import com.kuruvatech.election.fragment.MainFragment;
 import com.kuruvatech.election.fragment.ShareAppFragment;
+import com.kuruvatech.election.fragment.VideoFragment;
 import com.kuruvatech.election.utils.SessionManager;
 import com.splunk.mint.Mint;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     SessionManager session;
     RelativeLayout navHead;
     TextView name,email,phno;
+    private boolean isMainFragmentOpen;
+    private boolean isdrawerbackpressed;
 
     public boolean isOnline(Context context) {
         ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -115,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+        isMainFragmentOpen = true;
+        isdrawerbackpressed = false;
 
 
     }
@@ -146,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 //        phno.setText(session.getKeyPhone());
 //        email.setText(session.getEmail());
         transaction.replace(R.id.frame, new MainFragment());
+        isMainFragmentOpen =  true;
         transaction.commit();
 
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -156,25 +163,30 @@ public class MainActivity extends AppCompatActivity {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.main) {
                     frag = new MainFragment();
+                    isMainFragmentOpen =  true;
                 }else if (itemId == R.id.invite) {
                     frag = new ShareAppFragment();
+                    isMainFragmentOpen =  false;
                 }
                 else if(itemId == R.id.videos)
                 {
-                    startActivity(new Intent(getApplicationContext(),CustomPlayerControlActivity.class));
+//                    startActivity(new Intent(getApplicationContext(),CustomPlayerControlActivity.class));
+                    frag = new VideoFragment();
+                    isMainFragmentOpen =  false;
                 }
-                else if(itemId == R.id.videos2)
+                else if(itemId == R.id.images)
                 {
-                    startActivity(new Intent(getApplicationContext(),MinimalPlayerActivity.class));
+                    frag = new ImageFragment();
+                    isMainFragmentOpen =  false;
                 }
-                else if(itemId == R.id.videos3)
-                {
-                    startActivity(new Intent(getApplicationContext(),YouTubePlayerFragmentActivity.class));
-                }
-                else if(itemId == R.id.videos4)
-                {
-                    startActivity(new Intent(getApplicationContext(),YouTubePlayerAcivity.class));
-                }
+//                else if(itemId == R.id.videos3)
+//                {
+//                    startActivity(new Intent(getApplicationContext(),YouTubePlayerFragmentActivity.class));
+//                }
+//                else if(itemId == R.id.videos4)
+//                {
+//                    startActivity(new Intent(getApplicationContext(),YouTubePlayerAcivity.class));
+//                }
                 if (frag != null) {
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.frame, frag);
@@ -187,6 +199,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (dLayout.isDrawerOpen(GravityCompat.START)) {
+            dLayout.closeDrawer(GravityCompat.START);
+        } else if (isMainFragmentOpen == false) {
+            if(!isdrawerbackpressed) {
+                dLayout.openDrawer(GravityCompat.START);
+                isdrawerbackpressed = true;
+            }
+            else {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame, new MainFragment());
+                isMainFragmentOpen = true;
+                transaction.commit();
+                isdrawerbackpressed = false;
+            }
+        } else {
+            //super.onBackPressed();
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
